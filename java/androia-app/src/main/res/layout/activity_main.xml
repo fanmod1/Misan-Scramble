@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android" android:id="@+id/scroll" android:layout_width="match_parent" android:layout_height="match_parent" android:background="#f2f5f0" android:fillViewport="true" android:clipToPadding="false">
+ <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="18dp">
+  <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:gravity="center_vertical" android:paddingTop="7dp" android:paddingBottom="23dp">
+   <ImageView android:layout_width="48dp" android:layout_height="48dp" android:src="@drawable/ic_launcher" android:contentDescription="弥散混淆图标"/>
+   <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:orientation="vertical" android:layout_marginStart="13dp">
+    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="弥散混淆  v1.4" android:textSize="23sp" android:textStyle="bold" android:textColor="#243c35"/>
+    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="图片混淆与还原 · fanmod" android:textSize="12sp" android:textColor="#7a8981" android:layout_marginTop="3dp"/>
+   </LinearLayout>
+  </LinearLayout>
+  <LinearLayout android:id="@+id/workspace" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical">
+   <LinearLayout android:id="@+id/controls" android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical" android:padding="21dp" android:background="@drawable/card">
+    <LinearLayout android:layout_width="match_parent" android:layout_height="48dp" android:padding="4dp" android:background="@drawable/tab_background">
+     <Button android:id="@+id/encryptTab" android:layout_width="0dp" android:layout_weight="1" android:layout_height="match_parent" android:text="混淆" android:textSize="14sp" android:textColor="#21483e" android:background="@drawable/field" android:stateListAnimator="@null"/>
+     <Button android:id="@+id/decryptTab" android:layout_width="0dp" android:layout_weight="1" android:layout_height="match_parent" android:text="解混淆" android:textSize="14sp" android:textColor="#76857d" android:background="@android:color/transparent" android:stateListAnimator="@null"/>
+    </LinearLayout>
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="22dp">
+     <LinearLayout android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content" android:orientation="vertical">
+      <TextView android:id="@+id/inputLabel" android:layout_width="match_parent" android:layout_height="wrap_content" android:text="要混淆的图片" android:textSize="13sp" android:textStyle="bold" android:textColor="#243c35"/>
+      <FrameLayout android:id="@+id/inputButton" android:layout_width="match_parent" android:layout_height="145dp" android:layout_marginTop="10dp" android:background="@drawable/file_box" android:foreground="?android:attr/selectableItemBackground" android:clickable="true" android:focusable="true" android:contentDescription="选择图片">
+       <TextView android:id="@+id/inputHint" android:layout_width="match_parent" android:layout_height="match_parent" android:text="＋\n\n选择图片" android:textColor="#839a89" android:textSize="13sp" android:gravity="center"/>
+       <ImageView android:id="@+id/inputThumb" android:layout_width="match_parent" android:layout_height="match_parent" android:padding="6dp" android:scaleType="centerCrop" android:visibility="gone" android:contentDescription="已选图片"/>
+      </FrameLayout>
+     </LinearLayout>
+     <LinearLayout android:id="@+id/coverField" android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content" android:layout_marginStart="14dp" android:orientation="vertical">
+      <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="表图" android:textSize="13sp" android:textStyle="bold" android:textColor="#243c35"/>
+      <FrameLayout android:id="@+id/coverButton" android:layout_width="match_parent" android:layout_height="145dp" android:layout_marginTop="10dp" android:background="@drawable/file_box" android:foreground="?android:attr/selectableItemBackground" android:clickable="true" android:focusable="true" android:contentDescription="选择表图">
+       <TextView android:id="@+id/coverHint" android:layout_width="match_parent" android:layout_height="match_parent" android:text="＋\n\n选择表图" android:textColor="#839a89" android:textSize="13sp" android:gravity="center"/>
+       <ImageView android:id="@+id/coverThumb" android:layout_width="match_parent" android:layout_height="match_parent" android:padding="6dp" android:scaleType="centerCrop" android:visibility="gone" android:contentDescription="已选表图"/>
+      </FrameLayout>
+     </LinearLayout>
+    </LinearLayout>
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="23dp">
+     <TextView android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content" android:text="密码" android:textColor="#243c35" android:textSize="13sp" android:textStyle="bold"/>
+     <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="可留空" android:textSize="11sp" android:textColor="#8e9a90"/>
+    </LinearLayout>
+    <LinearLayout android:layout_width="match_parent" android:layout_height="49dp" android:layout_marginTop="10dp" android:gravity="center_vertical" android:background="@drawable/field" android:paddingStart="13dp" android:paddingEnd="8dp">
+     <EditText android:id="@+id/key" android:layout_width="0dp" android:layout_weight="1" android:layout_height="match_parent" android:inputType="textPassword" android:singleLine="true" android:hint="输入密码" android:textSize="13sp" android:textColor="#243c35" android:textColorHint="#a4ada2" android:background="@android:color/transparent" android:importantForAutofill="no"/>
+     <Button android:id="@+id/showKey" android:layout_width="46dp" android:layout_height="match_parent" android:minWidth="0dp" android:padding="0dp" android:text="显示" android:textSize="11sp" android:textColor="#7b8c7d" android:background="@android:color/transparent" android:stateListAnimator="@null"/>
+    </LinearLayout>
+    <Button android:id="@+id/run" android:layout_width="match_parent" android:layout_height="51dp" android:layout_marginTop="23dp" android:text="开始混淆    →" android:textSize="14sp" android:textColor="#ffffff" android:background="@drawable/primary" android:stateListAnimator="@null"/>
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="20dp">
+     <TextView android:id="@+id/status" android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content" android:text="请选择图片和表图" android:textSize="11sp" android:textColor="#80907e"/>
+     <TextView android:id="@+id/percent" android:layout_width="wrap_content" android:layout_height="wrap_content" android:textSize="11sp" android:textColor="#80907e"/>
+    </LinearLayout>
+    <ProgressBar android:id="@+id/progress" style="?android:attr/progressBarStyleHorizontal" android:layout_width="match_parent" android:layout_height="5dp" android:layout_marginTop="9dp" android:progressTint="#769a66" android:progressBackgroundTint="#edf2eb" android:max="1000"/>
+   </LinearLayout>
+   <LinearLayout android:id="@+id/resultCard" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="18dp" android:orientation="vertical" android:padding="20dp" android:background="@drawable/card">
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content">
+     <TextView android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content" android:text="预览" android:textSize="13sp" android:textStyle="bold" android:textColor="#243c35"/>
+     <TextView android:id="@+id/dimensions" android:layout_width="wrap_content" android:layout_height="wrap_content" android:textSize="11sp" android:textColor="#8b978a"/>
+    </LinearLayout>
+    <FrameLayout android:layout_width="match_parent" android:layout_height="320dp" android:layout_marginTop="20dp" android:background="#f6f8f3">
+     <TextView android:id="@+id/empty" android:layout_width="match_parent" android:layout_height="match_parent" android:gravity="center" android:text="▧\n\n图片将在这里显示" android:textSize="12sp" android:textColor="#a1afa0"/>
+     <ImageView android:id="@+id/preview" android:layout_width="match_parent" android:layout_height="match_parent" android:padding="12dp" android:scaleType="fitCenter" android:contentDescription="图片预览"/>
+    </FrameLayout>
+    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginTop="18dp" android:gravity="center_vertical">
+     <TextView android:id="@+id/resultLabel" android:layout_width="0dp" android:layout_weight="1" android:layout_height="wrap_content" android:text="等待处理" android:textSize="11sp" android:textColor="#8d9b89"/>
+     <Button android:id="@+id/save" android:layout_width="140dp" android:layout_height="44dp" android:text="保存图片    ↓" android:textSize="12sp" android:textColor="#335b3c" android:background="@drawable/secondary" android:stateListAnimator="@null" android:enabled="false"/>
+    </LinearLayout>
+   </LinearLayout>
+  </LinearLayout>
+ </LinearLayout>
+</ScrollView>

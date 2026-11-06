@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+ <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+ <meta name="author" content="fanmod"><link rel="icon" href="icon.ico" sizes="any"><link rel="icon" href="icon.svg" type="image/svg+xml"><meta name="theme-color" content="#21483e"><title>弥散混淆 v1.4</title>
+ <link rel="stylesheet" href="style.css"><script src="misan.js"></script>
+</head>
+<body>
+ <main class="shell">
+  <header class="brand"><img class="brand-icon" src="icon.svg" width="52" height="52" alt=""><div><h1>弥散混淆 <span>v1.4</span></h1><p>图片混淆与还原 · fanmod</p></div></header>
+  <div class="workspace">
+   <section class="card controls" aria-label="图片处理">
+    <div class="tabs" role="tablist" aria-label="操作"><button id="encryptTab" class="active" role="tab" aria-selected="true">混淆</button><button id="decryptTab" role="tab" aria-selected="false">解混淆</button></div>
+    <div class="files">
+     <label class="file-field" id="inputDrop"><span id="inputLabel">要混淆的图片</span><div class="file-box"><img id="inputThumb" alt="" hidden><div class="upload-symbol" aria-hidden="true">＋</div><strong id="inputName">选择图片</strong><small>点击或拖入</small></div><input id="inputFile" type="file" accept="image/*"></label>
+     <label class="file-field" id="coverDrop"><span>表图</span><div class="file-box"><img id="coverThumb" alt="" hidden><div class="upload-symbol" aria-hidden="true">＋</div><strong id="coverName">选择表图</strong><small>点击或拖入</small></div><input id="coverFile" type="file" accept="image/*"></label>
+    </div>
+    <label class="key-label" for="key">密码 <span>可留空</span></label><div class="key-box"><input id="key" type="password" autocomplete="off" placeholder="输入密码" spellcheck="false"><button id="toggleKey" type="button" aria-label="显示密码">显示</button></div>
+    <button id="run" class="primary">开始混淆 <span aria-hidden="true">→</span></button>
+    <div class="progress-area" aria-live="polite"><div class="progress-label"><span id="status">请选择图片和表图</span><span id="percent"></span></div><progress id="progress" max="1" value="0" aria-label="处理进度"></progress></div>
+   </section>
+   <section class="card result" aria-label="图片预览"><div class="result-header"><h2>预览</h2><span id="dimensions"></span></div><div id="previewArea" class="preview-area"><div id="empty" class="empty"><span aria-hidden="true">▧</span><p>图片将在这里显示</p></div><img id="preview" alt="图片预览" hidden></div><div class="result-footer"><span id="resultLabel">等待处理</span><button id="save" class="secondary" disabled>下载图片 <span aria-hidden="true">↓</span></button></div></section>
+  </div>
+ </main>
+ <script>
+ 'use strict';
+ const $=s=>document.getElementById(s);let mode='encrypt',input=null,cover=null,result=null,previewURL=null,busy=false;
+ const thumbs={};
+ function preview(blob){if(previewURL)URL.revokeObjectURL(previewURL);previewURL=URL.createObjectURL(blob);$('preview').src=previewURL;$('preview').hidden=false;$('empty').hidden=true;}
+ function reset(){result=null;$('save').disabled=true;$('dimensions').textContent='';$('resultLabel').textContent='等待处理';$('progress').value=0;$('percent').textContent='';$('status').textContent=mode==='encrypt'?'请选择图片和表图':'请选择要还原的图片';}
+ function setMode(next){if(busy||mode===next)return;mode=next;reset();$('encryptTab').classList.toggle('active',mode==='encrypt');$('decryptTab').classList.toggle('active',mode==='decrypt');$('encryptTab').setAttribute('aria-selected',mode==='encrypt');$('decryptTab').setAttribute('aria-selected',mode==='decrypt');$('coverDrop').hidden=mode==='decrypt';$('inputLabel').textContent=mode==='encrypt'?'要混淆的图片':'要还原的图片';$('run').innerHTML=(mode==='encrypt'?'开始混淆':'开始解混淆')+' <span aria-hidden="true">→</span>';}
+ function select(which,file){if(!file||busy)return;if(which==='input')input=file;else cover=file;reset();$(which+'Name').textContent=file.name;if(thumbs[which])URL.revokeObjectURL(thumbs[which]);thumbs[which]=URL.createObjectURL(file);$(which+'Thumb').src=thumbs[which];$(which+'Thumb').hidden=false;$(which+'Drop').classList.add('has-file');if(which==='input')preview(file);}
+ for(const which of ['input','cover']){$(which+'File').onchange=e=>select(which,e.target.files[0]);const drop=$(which+'Drop');drop.ondragover=e=>{e.preventDefault();if(!busy)drop.classList.add('drag');};drop.ondragleave=()=>drop.classList.remove('drag');drop.ondrop=e=>{e.preventDefault();drop.classList.remove('drag');select(which,e.dataTransfer.files[0]);};}
+ $('encryptTab').onclick=()=>setMode('encrypt');$('decryptTab').onclick=()=>setMode('decrypt');
+ $('toggleKey').onclick=()=>{const visible=$('key').type==='password';$('key').type=visible?'text':'password';$('toggleKey').textContent=visible?'隐藏':'显示';$('toggleKey').setAttribute('aria-label',visible?'隐藏密码':'显示密码');};
+ function lock(value){busy=value;for(const id of ['encryptTab','decryptTab','inputFile','coverFile','key','toggleKey','run'])$(id).disabled=value;document.body.classList.toggle('busy',value);}
+ $('run').onclick=async()=>{if(!input||mode==='encrypt'&&!cover){$('status').textContent=mode==='encrypt'?'请选择图片和表图':'请选择要还原的图片';return;}reset();lock(true);$('status').textContent=mode==='encrypt'?'正在混淆…':'正在还原…';let last=0;try{result=await MisanScramble.process(mode,input,mode==='encrypt'?cover:null,$('key').value,mode==='encrypt'?'encrypted.png':'restored.png',n=>{last=Math.max(last,n);$('progress').value=last;$('percent').textContent=Math.round(last*100)+'%';});const blob=new Blob([result.data],{type:result.mime});preview(blob);$('dimensions').textContent=result.width+' × '+result.height;$('resultLabel').textContent='已完成';$('status').textContent=mode==='encrypt'?'混淆完成':'还原完成';$('save').disabled=false;}catch(e){$('status').textContent=e.message||'处理失败，请重试';$('progress').value=0;$('percent').textContent='';}finally{lock(false);}};
+ $('save').onclick=()=>{if(!result)return;const url=URL.createObjectURL(new Blob([result.data],{type:result.mime})),a=document.createElement('a');a.href=url;a.download=result.output;a.click();setTimeout(()=>URL.revokeObjectURL(url),3000);};
+ </script>
+</body>
+</html>
